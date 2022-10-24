@@ -9,6 +9,10 @@ export const useForm = ( initialForm = {}, formValidations = {} ) => {
         createValidators()
     }, [formState])
 
+    useEffect(() => {
+        setFormState(initialForm)
+    }, [initialForm])
+
     const isFormValid = useMemo(() => {
         for (const formValue of Object.keys( formValidation )) {
             if( formValidation[ formValue ] !== null ) return false
@@ -17,23 +21,23 @@ export const useForm = ( initialForm = {}, formValidations = {} ) => {
     }, [ formValidation ])
 
     const onInputChange = ({ target }) => {
-        const { name, value } = target;
+        const { name, value } = target
         setFormState({
             ...formState,
             [ name ]: value
-        });
+        })
     }
   
 
     const onResetForm = () => {
-        setFormState( initialForm );
+        setFormState( initialForm )
     }
 
     const createValidators = () => {
         const formCheckedValues = {}
 
         for (const formField of Object.keys(formValidations)) {
-            const [ funn, errorMessage = 'Error de validación' ] = formValidations[formField];
+            const [ funn, errorMessage = 'Error de validación' ] = formValidations[formField]
 
             formCheckedValues[`${formField}Valid`] = funn( formState[ formField]) ? null : errorMessage 
         }
